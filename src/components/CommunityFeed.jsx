@@ -1,73 +1,75 @@
-import { ArrowBigUp, ArrowBigDown, MessageSquare, Share2, Bookmark } from 'lucide-react';
+import { ArrowBigUp, MessageSquare, Tag } from 'lucide-react';
 
-function PostCard({ post, onVote }) {
+function ConstellationTag({ name }) {
   return (
-    <div className="flex gap-4 rounded-2xl border border-white/10 bg-white/5 p-4 shadow-sm">
-      <div className="flex w-10 flex-col items-center gap-1 rounded-xl bg-white/5 py-2">
-        <button onClick={() => onVote(post.id, 1)} className="rounded p-1 text-gray-300 hover:bg-white/10 hover:text-white" aria-label="Upvote">
-          <ArrowBigUp className="h-6 w-6" />
-        </button>
-        <span className="text-sm font-semibold text-white">{post.votes}</span>
-        <button onClick={() => onVote(post.id, -1)} className="rounded p-1 text-gray-300 hover:bg-white/10 hover:text-white" aria-label="Downvote">
-          <ArrowBigDown className="h-6 w-6" />
-        </button>
-      </div>
-      <div className="min-w-0 flex-1">
-        <div className="mb-1 flex flex-wrap items-center gap-2 text-xs text-gray-400">
-          <span className="font-medium text-purple-300">{post.community}</span>
-          <span>•</span>
-          <span>Posted by u/{post.author}</span>
-        </div>
-        <h4 className="mb-1 text-lg font-semibold tracking-tight text-white">{post.title}</h4>
-        {post.body && <p className="mb-3 text-sm text-gray-300">{post.body}</p>}
-        <div className="flex items-center gap-4 text-sm text-gray-300">
-          <button className="inline-flex items-center gap-1 hover:text-white">
-            <MessageSquare className="h-4 w-4" /> {post.comments} Comments
-          </button>
-          <button className="inline-flex items-center gap-1 hover:text-white">
-            <Share2 className="h-4 w-4" /> Share
-          </button>
-          <button className="inline-flex items-center gap-1 hover:text-white">
-            <Bookmark className="h-4 w-4" /> Save
-          </button>
-        </div>
-      </div>
-    </div>
+    <span className="inline-flex items-center gap-1 rounded-md border border-white/10 bg-white/5 px-2 py-1 text-xs text-white/80">
+      <Tag className="h-3.5 w-3.5 text-purple-300" />
+      {name}
+    </span>
   );
 }
 
-export default function CommunityFeed({ posts = [], onVote }) {
-  const totalCommunities = new Set(posts.map((p) => p.community)).size;
-
+export default function CommunityFeed({ posts, onCreate }) {
   return (
-    <section className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 py-6 md:grid-cols-3">
-      <div className="space-y-4 md:col-span-2">
-        {posts.map((post) => (
-          <PostCard key={post.id} post={post} onVote={onVote} />
+    <section id="community" className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <div className="lg:col-span-2 space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-white/90">Community Threads</h2>
+          <button
+            onClick={onCreate}
+            className="rounded-md border border-white/15 bg-white/5 px-3 py-1.5 text-sm text-white hover:bg-white/10"
+          >
+            New Thread
+          </button>
+        </div>
+
+        {posts.map((p) => (
+          <article key={p.id} className="rounded-lg border border-white/10 bg-white/5 p-4">
+            <div className="flex items-start gap-4">
+              <button className="group rounded-md border border-white/10 bg-white/5 px-2 py-1 text-white/80 hover:bg-white/10">
+                <ArrowBigUp className="h-5 w-5 text-white group-hover:text-purple-300" />
+              </button>
+              <div className="flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <ConstellationTag name={p.constellation} />
+                  <span className="text-xs text-white/50">by {p.author}</span>
+                  <span className="text-xs text-white/40">• {new Date(p.createdAt).toLocaleDateString()}</span>
+                </div>
+                <h3 className="mt-1 text-white font-medium leading-tight">{p.title}</h3>
+                <p className="mt-1 text-sm text-white/70">{p.body}</p>
+                <div className="mt-3 inline-flex items-center gap-2 text-xs text-white/60">
+                  <span>{p.upvotes} upvotes</span>
+                  <span className="h-1 w-1 rounded-full bg-white/30" />
+                  <span className="inline-flex items-center gap-1">
+                    <MessageSquare className="h-3.5 w-3.5" /> {p.comments} comments
+                  </span>
+                </div>
+              </div>
+            </div>
+          </article>
         ))}
-        {posts.length === 0 && (
-          <div className="rounded-2xl border border-dashed border-white/20 bg-white/5 p-8 text-center text-gray-300">
-            No posts yet. Be the first to create one!
-          </div>
-        )}
       </div>
+
       <aside className="space-y-4">
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-4 shadow-sm">
-          <h5 className="mb-2 text-sm font-semibold text-white">About this community</h5>
-          <p className="text-sm text-gray-300">A modern space for thoughtful discussions on tech, science, and design.</p>
-          <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
-            <div className="rounded-xl bg-white/5 p-3 text-center">
-              <div className="text-xl font-bold text-white">{posts.length}</div>
-              <div className="text-xs text-gray-400">Posts</div>
-            </div>
-            <div className="rounded-xl bg-white/5 p-3 text-center">
-              <div className="text-xl font-bold text-white">{totalCommunities}</div>
-              <div className="text-xs text-gray-400">Communities</div>
-            </div>
+        <div className="rounded-lg border border-white/10 bg-white/5 p-4">
+          <h3 className="font-medium text-white">Discover Constellations</h3>
+          <p className="mt-1 text-sm text-white/70">
+            Explore topic clusters. No /r/ prefixes — modern, clean, and purpose-built.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {['design-orbit', 'quantum-lane', 'tooling-lab', 'ship-it'].map((c) => (
+              <ConstellationTag key={c} name={c} />
+            ))}
           </div>
         </div>
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-purple-900/40 to-fuchsia-900/30 p-4 text-sm text-purple-100 shadow-sm">
-          Looking for the latest headlines? Switch to the News tab to browse curated stories.
+
+        <div className="rounded-lg border border-white/10 bg-white/5 p-4">
+          <h3 className="font-medium text-white">Posting Guidelines</h3>
+          <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-white/70">
+            <li>Share learnings, not just links.</li>
+            <li>Be specific. Add context and examples.</li>
+            <li>Assume good intent; keep it constructive.</li>
+          </ul>
         </div>
       </aside>
     </section>

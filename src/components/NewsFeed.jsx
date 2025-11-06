@@ -1,67 +1,64 @@
-import { Star, Calendar, Share2 } from 'lucide-react';
+import { Star, ExternalLink } from 'lucide-react';
 
 const articles = [
   {
-    id: 1,
-    title: 'AI makes a leap: Multimodal models go mainstream',
-    summary: 'New research blends text, images, and audio to create assistants that understand the world like humans do.',
-    tag: 'Technology',
-    date: 'Today',
-    image:
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1400&auto=format&fit=crop',
+    id: 'a1',
+    title: 'Edge runtimes are rewriting the playbook',
+    source: 'Compute Journal',
+    url: '#',
+    summary:
+      'Cold boots are out, warm edges are in. Teams are shipping micro-services closer to users for instant TTFB.',
+    score: 324,
   },
   {
-    id: 2,
-    title: 'Fusion energy crosses key milestone',
-    summary: 'Scientists report net energy gain in repeated experiments—industry gears up for pilot plants.',
-    tag: 'Science',
-    date: '2h ago',
-    image:
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1400&auto=format&fit=crop',
+    id: 'a2',
+    title: 'Design tokens: one system to rule colors in dark UIs',
+    source: 'Interface Notes',
+    url: '#',
+    summary:
+      'Token-driven theming keeps consistency across apps. Tips for contrast, chroma, and accessibility in the dark.',
+    score: 210,
   },
   {
-    id: 3,
-    title: 'Design systems in 2025: tokens, AI, and speed',
-    summary: 'What top product teams changed in their design stacks to ship faster with higher quality.',
-    tag: 'Design',
-    date: 'Yesterday',
-    image:
-      'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1400&auto=format&fit=crop',
+    id: 'a3',
+    title: 'Practical RAG: getting value without overbuilding',
+    source: 'ML Weekly',
+    url: '#',
+    summary:
+      'A field guide to delivering search that actually helps users before jumping to multi-agent orchestration.',
+    score: 178,
   },
 ];
 
 export default function NewsFeed() {
   return (
-    <section className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 py-6 md:grid-cols-3">
+    <section className="mt-10 space-y-4">
+      <h2 className="text-lg font-semibold text-white/90">Curated News</h2>
       {articles.map((a) => (
-        <article key={a.id} className="group overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-sm transition hover:shadow-md">
-          <div className="relative">
-            <img
-              src={a.image}
-              alt=""
-              className="h-44 w-full object-cover transition duration-300 group-hover:scale-[1.02]"
-              loading="lazy"
-            />
-            <span className="absolute left-4 top-4 rounded-full bg-black/60 px-3 py-1 text-xs font-medium text-purple-200 ring-1 ring-white/10 backdrop-blur">{a.tag}</span>
-          </div>
-          <div className="space-y-3 p-4">
-            <h3 className="line-clamp-2 text-lg font-semibold tracking-tight text-white">{a.title}</h3>
-            <p className="line-clamp-3 text-sm text-gray-300">{a.summary}</p>
-            <div className="flex items-center justify-between text-xs text-gray-400">
-              <span className="inline-flex items-center gap-1"><Calendar className="h-3.5 w-3.5" /> {a.date}</span>
-              <div className="flex items-center gap-3 text-gray-300">
-                <button className="inline-flex items-center gap-1 hover:text-white"><Star className="h-4 w-4" /> Save</button>
-                <button className="inline-flex items-center gap-1 hover:text-white"><Share2 className="h-4 w-4" /> Share</button>
-              </div>
+        <article
+          key={a.id}
+          className="rounded-lg border border-white/10 bg-white/5 p-4 transition hover:bg-white/10"
+        >
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h3 className="text-white font-medium leading-tight">{a.title}</h3>
+              <p className="mt-1 text-sm text-white/70">{a.summary}</p>
+              <div className="mt-2 text-xs text-white/50">{a.source}</div>
+            </div>
+            <div className="flex items-center gap-3 shrink-0">
+              <span className="inline-flex items-center gap-1 rounded-md bg-white/10 px-2 py-1 text-xs text-white">
+                <Star className="h-3.5 w-3.5 text-yellow-300" /> {a.score}
+              </span>
+              <a
+                href={a.url}
+                className="inline-flex items-center gap-1 text-sm text-purple-300 hover:text-purple-200"
+              >
+                Read <ExternalLink className="h-4 w-4" />
+              </a>
             </div>
           </div>
         </article>
       ))}
-      <aside className="md:col-span-3">
-        <div className="mt-2 rounded-xl border border-purple-500/30 bg-purple-950/30 p-4 text-sm text-purple-100 ring-1 ring-inset ring-white/10">
-          Tip: Switch to the Community tab to explore the Reddit-style feed and join discussions.
-        </div>
-      </aside>
     </section>
   );
 }

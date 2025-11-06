@@ -1,56 +1,80 @@
-import { X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-export default function CreatePostModal({ open, onClose, onSubmit }) {
+export default function CreatePostModal({ onCancel, onSubmit }) {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
-  const [community, setCommunity] = useState('r/technology');
-
-  useEffect(() => {
-    if (!open) {
-      setTitle('');
-      setBody('');
-      setCommunity('r/technology');
-    }
-  }, [open]);
-
-  if (!open) return null;
+  const [constellation, setConstellation] = useState('design-orbit');
+  const [author, setAuthor] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!title.trim()) return;
-    onSubmit({ title, body, community });
+    if (!title.trim() || !body.trim()) return;
+    onSubmit({ title, body, constellation, author });
   };
 
   return (
-    <div className="fixed inset-0 z-30 grid place-items-center bg-black/70 p-4">
-      <div className="w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 bg-black/80 backdrop-blur shadow-xl">
-        <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
-          <h3 className="text-base font-semibold text-white">Create a post</h3>
-          <button onClick={onClose} className="rounded-lg p-1.5 text-gray-300 hover:bg-white/5" aria-label="Close">
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-        <form onSubmit={handleSubmit} className="space-y-3 p-4">
+    <div className="fixed inset-0 z-50 grid place-items-center bg-black/80 p-4">
+      <div className="w-full max-w-lg rounded-xl border border-white/10 bg-black p-5 text-white shadow-xl">
+        <h3 className="text-lg font-semibold">Create a new thread</h3>
+        <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-200">Community</label>
-            <select value={community} onChange={(e) => setCommunity(e.target.value)} className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none focus:border-purple-400/40 focus:ring-4 focus:ring-purple-500/10">
-              <option className="bg-black">r/technology</option>
-              <option className="bg-black">r/science</option>
-              <option className="bg-black">r/design</option>
+            <label className="text-sm text-white/70">Title</label>
+            <input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="mt-1 w-full rounded-md border border-white/15 bg-white/5 px-3 py-2 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="What do you want to discuss?"
+            />
+          </div>
+
+          <div>
+            <label className="text-sm text-white/70">Constellation</label>
+            <select
+              value={constellation}
+              onChange={(e) => setConstellation(e.target.value)}
+              className="mt-1 w-full rounded-md border border-white/15 bg-white/5 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+            >
+              {['design-orbit', 'quantum-lane', 'tooling-lab', 'ship-it', 'general'].map((c) => (
+                <option key={c} value={c} className="bg-black text-white">{c}</option>
+              ))}
             </select>
           </div>
+
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-200">Title</label>
-            <input value={title} onChange={(e) => setTitle(e.target.value)} className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none placeholder:text-gray-400 focus:border-purple-400/40 focus:ring-4 focus:ring-purple-500/10" placeholder="What do you want to share?" />
+            <label className="text-sm text-white/70">Body</label>
+            <textarea
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              rows={5}
+              className="mt-1 w-full rounded-md border border-white/15 bg-white/5 px-3 py-2 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="Share details, context, and examples..."
+            />
           </div>
+
           <div>
-            <label className="mb-1 block text-sm font-medium text-gray-200">Body</label>
-            <textarea value={body} onChange={(e) => setBody(e.target.value)} rows={5} className="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none placeholder:text-gray-400 focus:border-purple-400/40 focus:ring-4 focus:ring-purple-500/10" placeholder="Write your post here..." />
+            <label className="text-sm text-white/70">Your name (optional)</label>
+            <input
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+              className="mt-1 w-full rounded-md border border-white/15 bg-white/5 px-3 py-2 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="e.g., NovaCodes"
+            />
           </div>
-          <div className="flex justify-end gap-2 pt-1">
-            <button type="button" onClick={onClose} className="rounded-xl border border-white/10 px-3 py-2 text-sm text-gray-200 hover:bg-white/5">Cancel</button>
-            <button type="submit" className="rounded-xl bg-gradient-to-r from-purple-600 to-fuchsia-600 px-3 py-2 text-sm font-medium text-white hover:brightness-110">Post</button>
+
+          <div className="flex justify-end gap-2 pt-2">
+            <button
+              type="button"
+              onClick={onCancel}
+              className="rounded-md border border-white/15 bg-white/5 px-3 py-2 text-sm text-white hover:bg-white/10"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="rounded-md bg-gradient-to-r from-purple-500 to-fuchsia-600 px-3 py-2 text-sm font-medium text-white hover:brightness-110"
+            >
+              Post Thread
+            </button>
           </div>
         </form>
       </div>
