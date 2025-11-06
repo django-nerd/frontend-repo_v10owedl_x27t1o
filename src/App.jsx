@@ -60,17 +60,32 @@ export default function App() {
   const showHero = useMemo(() => activeTab === 'news', [activeTab]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+    <div className="min-h-screen bg-black text-gray-100">
+      <div className="pointer-events-none fixed inset-0 bg-gradient-to-br from-purple-900/40 via-fuchsia-900/20 to-black" />
+
       <Header activeTab={activeTab} setActiveTab={setActiveTab} onCreatePost={() => setShowCreate(true)} />
 
-      {showHero && <Hero onExploreNews={() => setActiveTab('news')} onExploreCommunity={() => setActiveTab('community')} />}
+      {showHero && (
+        <Hero
+          onExploreNews={() => setActiveTab('news')}
+          onExploreCommunity={() => setActiveTab('community')}
+        />
+      )}
 
-      {activeTab === 'news' ? <NewsFeed /> : <CommunityFeed posts={posts} onVote={handleVote} />}
+      {activeTab === 'news' ? (
+        <NewsFeed />
+      ) : (
+        <CommunityFeed posts={posts} onVote={handleVote} />
+      )}
 
-      <CreatePostModal open={showCreate} onClose={() => setShowCreate(false)} onSubmit={handleCreatePost} />
+      <CreatePostModal
+        open={showCreate}
+        onClose={() => setShowCreate(false)}
+        onSubmit={handleCreatePost}
+      />
 
-      <footer className="mx-auto max-w-7xl px-4 py-10 text-center text-sm text-gray-500">
-        Built with ❤️ — News + Community in one clean experience.
+      <footer className="mx-auto max-w-7xl px-4 py-10 text-center text-sm text-gray-400">
+        DusknoirDotNet — News + Community in one cosmic experience.
       </footer>
     </div>
   );
